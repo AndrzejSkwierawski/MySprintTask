@@ -31,12 +31,15 @@
 			this.StartButton = new System.Windows.Forms.Button();
 			this.timeLabel = new System.Windows.Forms.Label();
 			this.numberOfThreadsUD = new System.Windows.Forms.NumericUpDown();
+			this.QtyLabel = new System.Windows.Forms.Label();
+			this.QtyYearLabel = new System.Windows.Forms.Label();
+			this.QtyCatLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numberOfThreadsUD)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// StartButton
 			// 
-			this.StartButton.Location = new System.Drawing.Point(26, 31);
+			this.StartButton.Location = new System.Drawing.Point(96, 12);
 			this.StartButton.Name = "StartButton";
 			this.StartButton.Size = new System.Drawing.Size(75, 23);
 			this.StartButton.TabIndex = 0;
@@ -47,15 +50,15 @@
 			// timeLabel
 			// 
 			this.timeLabel.AutoSize = true;
-			this.timeLabel.Location = new System.Drawing.Point(65, 12);
+			this.timeLabel.Location = new System.Drawing.Point(26, 35);
 			this.timeLabel.Name = "timeLabel";
-			this.timeLabel.Size = new System.Drawing.Size(35, 13);
+			this.timeLabel.Size = new System.Drawing.Size(39, 13);
 			this.timeLabel.TabIndex = 1;
-			this.timeLabel.Text = "label1";
+			this.timeLabel.Text = "Cycle: ";
 			// 
 			// numberOfThreadsUD
 			// 
-			this.numberOfThreadsUD.Location = new System.Drawing.Point(108, 33);
+			this.numberOfThreadsUD.Location = new System.Drawing.Point(12, 12);
 			this.numberOfThreadsUD.Maximum = new decimal(new int[] {
             16,
             0,
@@ -75,11 +78,41 @@
             0,
             0});
 			// 
+			// QtyLabel
+			// 
+			this.QtyLabel.AutoSize = true;
+			this.QtyLabel.Location = new System.Drawing.Point(26, 61);
+			this.QtyLabel.Name = "QtyLabel";
+			this.QtyLabel.Size = new System.Drawing.Size(72, 13);
+			this.QtyLabel.TabIndex = 3;
+			this.QtyLabel.Text = "Summary Qty:";
+			// 
+			// QtyYearLabel
+			// 
+			this.QtyYearLabel.AutoSize = true;
+			this.QtyYearLabel.Location = new System.Drawing.Point(26, 89);
+			this.QtyYearLabel.Name = "QtyYearLabel";
+			this.QtyYearLabel.Size = new System.Drawing.Size(63, 13);
+			this.QtyYearLabel.TabIndex = 4;
+			this.QtyYearLabel.Text = "Qty by year:";
+			// 
+			// QtyCatLabel
+			// 
+			this.QtyCatLabel.AutoSize = true;
+			this.QtyCatLabel.Location = new System.Drawing.Point(168, 89);
+			this.QtyCatLabel.Name = "QtyCatLabel";
+			this.QtyCatLabel.Size = new System.Drawing.Size(84, 13);
+			this.QtyCatLabel.TabIndex = 5;
+			this.QtyCatLabel.Text = "Qty by category:";
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(284, 261);
+			this.ClientSize = new System.Drawing.Size(464, 451);
+			this.Controls.Add(this.QtyCatLabel);
+			this.Controls.Add(this.QtyYearLabel);
+			this.Controls.Add(this.QtyLabel);
 			this.Controls.Add(this.numberOfThreadsUD);
 			this.Controls.Add(this.timeLabel);
 			this.Controls.Add(this.StartButton);
@@ -96,6 +129,9 @@
 		private System.Windows.Forms.Button StartButton;
 		private System.Windows.Forms.Label timeLabel;
 		private System.Windows.Forms.NumericUpDown numberOfThreadsUD;
+		private System.Windows.Forms.Label QtyLabel;
+		private System.Windows.Forms.Label QtyYearLabel;
+		private System.Windows.Forms.Label QtyCatLabel;
 	}
 }
 

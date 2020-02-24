@@ -7,8 +7,6 @@ namespace JobApplication
 {
 	class CsvFile
 	{
-		private int qty;
-
 		public string Path { get; set; }
 		public bool Managed { get; set; }
 
@@ -20,7 +18,6 @@ namespace JobApplication
 		{
 			this.Path = path;
 			this.Managed = false;
-			this.qty = 0;
 		}
 
 	}
