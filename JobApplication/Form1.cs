@@ -46,7 +46,7 @@ namespace JobApplication
 
 		private void Start()
 		{
-			Thread thread = new Thread(() => Timer(10)); //60
+			Thread thread = new Thread(() => Timer(3)); //60
 			thread.Start();
 			this.path = Path.GetFullPath(Path.Combine(path, samplePath1));
 			this.files = Directory.GetFiles(this.path);
@@ -250,14 +250,24 @@ namespace JobApplication
 		{
 			foreach(FileMenager thread in this.fileMenager)
 			{
-				thread.Thread.Suspend();
+				try
+				{
+					thread.Thread.Suspend();
+				}
+				catch(Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
 			}
 			foreach (List<LineValue> list in ValuesList)
 			{
+				long sum = 0;
 				foreach (LineValue value in list)
 				{
-					this.summaryQty += value.Qty;
+
+					sum += value.Qty;
 				}
+				this.summaryQty = sum;
 			}
 			this.Invoke(new Action(() => this.QtyLabel.Text = "Summary Qty: " + this.summaryQty));
 
@@ -315,7 +325,14 @@ namespace JobApplication
 
 			foreach (FileMenager thread in this.fileMenager)
 			{
-				thread.Thread.Resume();
+				try
+				{
+					thread.Thread.Resume();
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+				}
 			}
 		}
 
