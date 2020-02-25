@@ -14,9 +14,11 @@ namespace JobApplication
 {
 	public partial class Form1 : Form
 	{
+		private string filesPath = @"../../TEMP_CSV_1";
+		private short UpdateCycle = 10;
 		private int NoT;
-		private string samplePath1 = @"../../TEMP_CSV_1";
-		//private string samplePath2 = @"../../TEMP_CSV_2";
+
+		bool finish = false;
 
 		private string path = Directory.GetCurrentDirectory();
 		private string[] files;
@@ -46,13 +48,38 @@ namespace JobApplication
 
 		private void Start()
 		{
-			Thread thread = new Thread(() => Timer(3)); //60
+			this.UpdateCycle = Convert.ToInt16(timerUD.Value);
+			Thread thread = new Thread(() => Timer(this.UpdateCycle)); //60
 			thread.Start();
-			this.path = Path.GetFullPath(Path.Combine(path, samplePath1));
+			this.path = Path.GetFullPath(Path.Combine(path, filesPath));
 			this.files = Directory.GetFiles(this.path);
 			setFileList(this.files);
 			DevideFilesByTHreads();
 
+			Thread checkFinish = new Thread(() => CheckEnd());
+			checkFinish.Start();
+		}
+
+		private void CheckEnd()
+		{
+			Thread.Sleep(this.UpdateCycle * 1000);
+			bool end = false;
+			while (true)
+			{
+				foreach (FileMenager thread in this.fileMenager)
+				{
+					if (!thread.Thread.IsAlive)
+					{
+						end = true;
+						break;
+					}
+				}
+				if (end)
+				{
+					break;
+				}
+			}
+			this.Invoke(new Action(() => this.finish = true));
 		}
 
 		private void DevideFilesByTHreads()
@@ -75,7 +102,6 @@ namespace JobApplication
 				int index = i;
 				this.fileMenager.Add(new FileMenager(new Thread(() => ParseFile(smallFileList, index)), smallFileList));
 				this.fileMenager.ElementAt(i).Start();
-
 			}
 		}
 
@@ -187,7 +213,6 @@ namespace JobApplication
 			}
 		}
 
-
 		private int GetTime(string time)
 		{
 			if (time != "TM")
@@ -199,7 +224,6 @@ namespace JobApplication
 				}
 				catch (Exception e)
 				{
-					Console.WriteLine(e.Message + time);
 					try
 					{
 						DateTime timeTmp = DateTime.ParseExact(time, "MM-dd-yyyy hh:mm tt", null);
@@ -241,8 +265,15 @@ namespace JobApplication
 			{
 				count++;
 				System.Threading.Thread.Sleep(seconds * 1000);
-				this.Invoke(new Action(() => this.timeLabel.Text = "Cycle: " + count.ToString()));
-				summQty();
+				this.Invoke(new Action(() => this.timeLabel.Text = "Cycle: " + count));
+				this.Invoke(new Action(() => summQty()));
+				
+
+				if (this.finish)
+				{
+					this.Invoke(new Action(() => this.timeLabel.Text = $"Finished in {count} cycles"));
+					return;
+				}
 			}
 		}
 
@@ -259,37 +290,40 @@ namespace JobApplication
 					Console.WriteLine(e.Message);
 				}
 			}
+			long sum = 0;
 			foreach (List<LineValue> list in ValuesList)
 			{
-				long sum = 0;
 				foreach (LineValue value in list)
 				{
 
 					sum += value.Qty;
 				}
-				this.summaryQty = sum;
 			}
+			this.summaryQty = sum;
 			this.Invoke(new Action(() => this.QtyLabel.Text = "Summary Qty: " + this.summaryQty));
 
+			Dictionary<int, int> dctYear = new Dictionary<int, int>();
 			foreach (Dictionary<int, int> dict in yearsList)
 			{
 				foreach(var item in dict)
 				{
 					var key = item.Key;
 					var val = item.Value;
-					if (!yearsDict.ContainsKey(key))
+					if (!dctYear.ContainsKey(key))
 					{
-						yearsDict.Add(key, val);
+						dctYear.Add(key, val);
 					}
 					else
 					{
 						int currValue;
-						yearsDict.TryGetValue(key, out currValue);
-						yearsDict.Remove(key);
-						yearsDict.Add(key, currValue + val);
+						dctYear.TryGetValue(key, out currValue);
+						dctYear.Remove(key);
+						dctYear.Add(key, currValue + val);
 					}
 				}
 			}
+			yearsDict = dctYear;
+
 			string output = "Qty by year: \n";
 			foreach (var item in yearsDict)
 			{
@@ -297,25 +331,28 @@ namespace JobApplication
 			}
 			this.Invoke(new Action(() => this.QtyYearLabel.Text = output));
 
+			Dictionary<string, int> dctCat = new Dictionary<string, int>();
 			foreach (Dictionary<string, int> dict in categoriesList)
 			{
 				foreach (var item in dict)
 				{
 					var key = item.Key;
 					var val = item.Value;
-					if (!categoryDict.ContainsKey(key))
+					if (!dctCat.ContainsKey(key))
 					{
-						categoryDict.Add(key, val);
+						dctCat.Add(key, val);
 					}
 					else
 					{
 						int currValue;
-						categoryDict.TryGetValue(key, out currValue);
-						categoryDict.Remove(key);
-						categoryDict.Add(key, currValue + val);
+						dctCat.TryGetValue(key, out currValue);
+						dctCat.Remove(key);
+						dctCat.Add(key, currValue + val);
 					}
 				}
 			}
+			categoryDict = dctCat;
+
 			output = "Qty by year: \n";
 			foreach (var item in categoryDict)
 			{
@@ -343,6 +380,11 @@ namespace JobApplication
 			{
 				this.fileList.Add(new CsvFile(file));
 			}
+		}
+
+		private void pathSelector_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			this.filesPath = "../../" + pathSelector.Text;
 		}
 	}
 }
