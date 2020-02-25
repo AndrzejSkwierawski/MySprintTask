@@ -123,7 +123,7 @@
             0,
             0});
 			this.timerUD.Minimum = new decimal(new int[] {
-            10,
+            60,
             0,
             0,
             0});
@@ -131,7 +131,7 @@
 			this.timerUD.Size = new System.Drawing.Size(77, 20);
 			this.timerUD.TabIndex = 6;
 			this.timerUD.Value = new decimal(new int[] {
-            10,
+            60,
             0,
             0,
             0});
