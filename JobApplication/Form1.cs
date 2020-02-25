@@ -40,12 +40,20 @@ namespace JobApplication
 			InitializeComponent();
 		}
 
+		/// <summary>
+		/// Catching the Start button click event.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void StartButton_Click(object sender, EventArgs e)
 		{
 			this.StartButton.Enabled = false;
 			Start();
 		}
 
+		/// <summary>
+		/// The Starting method - takes parameters and initalizes threads.
+		/// </summary>
 		private void Start()
 		{
 			this.UpdateCycle = Convert.ToInt16(timerUD.Value);
@@ -60,6 +68,9 @@ namespace JobApplication
 			checkFinish.Start();
 		}
 
+		/// <summary>
+		/// Checks if the process is over.
+		/// </summary>
 		private void CheckEnd()
 		{
 			Thread.Sleep(this.UpdateCycle * 1000);
@@ -82,6 +93,9 @@ namespace JobApplication
 			this.Invoke(new Action(() => this.finish = true));
 		}
 
+		/// <summary>
+		/// Devides files form choosen directory by threads.
+		/// </summary>
 		private void DevideFilesByTHreads()
 		{
 			this.NoT = Convert.ToInt16(numberOfThreadsUD.Value);
@@ -105,6 +119,11 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Parses files of list in infinite loop.
+		/// </summary>
+		/// <param name="fileList">List of files</param>
+		/// <param name="index">Index of thread</param>
 		private void ParseFile(List<CsvFile> fileList, int index)
 		{
 			ValuesList.Add(new List<LineValue>());
@@ -149,6 +168,10 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Gets all the yers and creates it's value of not done yet.
+		/// </summary>
+		/// <param name="index">Index of thread</param>
 		private void GetAllYears(int index)
 		{
 			List<LineValue> list =  ValuesList.ElementAt(index);
@@ -181,6 +204,10 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Gets all the categories and creates it's value of not done yet.
+		/// </summary>
+		/// <param name="index">Index of thread</param>
 		private void GetAllCategories(int index)
 		{
 			List<LineValue> list = ValuesList.ElementAt(index);
@@ -213,6 +240,11 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Parses time to one format.
+		/// </summary>
+		/// <param name="time">Time string</param>
+		/// <returns>Time object</returns>
 		private int GetTime(string time)
 		{
 			if (time != "TM")
@@ -239,6 +271,11 @@ namespace JobApplication
 			return 0;
 		}
 
+		/// <summary>
+		/// Parses category to one format.
+		/// </summary>
+		/// <param name="category">category</param>
+		/// <returns>Category string</returns>
 		private string GetCategory(string category)
 		{
 			if (category != "Category")
@@ -248,6 +285,11 @@ namespace JobApplication
 			return null;
 		}
 
+		/// <summary>
+		/// Parses Qty to int value
+		/// </summary>
+		/// <param name="qty">qty string</param>
+		/// <returns>Qty int value</returns>
 		private int GetQty(string qty)
 		{
 			int qtyTmp;
@@ -258,6 +300,10 @@ namespace JobApplication
 			return 0;
 		}
 
+		/// <summary>
+		/// Timer - does list of methods in selected time in seconds.
+		/// </summary>
+		/// <param name="seconds">time in seconds</param>
 		private void Timer(int seconds)
 		{
 			int count = 0;
@@ -277,6 +323,9 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Sums all Qty valeus of all threds.
+		/// </summary>
 		private void summQty()
 		{
 			foreach(FileMenager thread in this.fileMenager)
@@ -373,6 +422,10 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Sets list of files.
+		/// </summary>
+		/// <param name="list"></param>
 		private void setFileList(string[] list)
 		{
 			this.fileList.Clear();
@@ -382,6 +435,11 @@ namespace JobApplication
 			}
 		}
 
+		/// <summary>
+		/// Handles the path change event.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void pathSelector_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.filesPath = "../../" + pathSelector.Text;
